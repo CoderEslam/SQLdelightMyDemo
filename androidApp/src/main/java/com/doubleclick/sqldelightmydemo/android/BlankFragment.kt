@@ -63,6 +63,7 @@ class BlankFragment : Fragment() {
         job = MyDB(requireContext().createDriver()).jobQueries
 
         viewLifecycleOwner.lifecycleScope.launch {
+//            https://developer.android.com/topic/libraries/architecture/coroutines
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 flow {
                     emit(job.getbyId(5).asFlow())
