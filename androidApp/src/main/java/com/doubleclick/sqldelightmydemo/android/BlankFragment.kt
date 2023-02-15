@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -16,6 +18,7 @@ import com.doubleclick.sqldelightmydemo.database.NameQueries
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -37,6 +40,7 @@ class BlankFragment : Fragment() {
     private var param2: String? = null
     private lateinit var name: NameQueries
     private lateinit var job: JobQueries
+    private lateinit var j: Job
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -62,7 +66,7 @@ class BlankFragment : Fragment() {
         name = MyDB(requireContext().createDriver()).nameQueries
         job = MyDB(requireContext().createDriver()).jobQueries
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        j = lifecycleScope.launch {
 //            https://developer.android.com/topic/libraries/architecture/coroutines
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 flow {
@@ -86,23 +90,4 @@ class BlankFragment : Fragment() {
 
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BlankFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BlankFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }
